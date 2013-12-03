@@ -18,5 +18,4 @@ Gem::Specification.new { |s|
   s.files = Dir.glob('lib/**/*.rb')
 
   s.add_runtime_dependency 'nokogiri'
-  s.add_runtime_dependency 'text'
 }

@@ -15,7 +15,6 @@
 require 'date'
 require 'open-uri'
 require 'nokogiri'
-require 'text'
 
 require 'crunchyroll/utils'
 require 'crunchyroll/crunchyroll'

@@ -8,7 +8,7 @@ module Crunchyroll
         tmp  = r.xpath('.//a/div/text()').to_s
         if tmp.downcase.include? series.downcase
           title = tmp
-          url   = r.xpath('.//a/@href')     .to_s
+          url   = r.xpath('.//a/@href').to_s
           break
         end
       }
