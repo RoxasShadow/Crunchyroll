@@ -14,8 +14,5 @@ Gem::Specification.new { |s|
   s.require_paths = ['lib']
   s.files         = Dir.glob('lib/**/*.rb')
 
-  s.require_paths = ['lib']
-  s.files = Dir.glob('lib/**/*.rb')
-
   s.add_runtime_dependency 'nokogiri'
 }
