@@ -12,20 +12,28 @@
 #  0. You just DO WHAT THE FUCK YOU WANT TO.
 ##
 
-class DateTime
+class Time
   def time_left(date)
-    a = self.to_time - 1*60*60    
-    secs  = (a - date.to_time).to_int
-    mins  = secs / 60
-    hours = mins / 60
+    secs  = (self - date).to_i
+    mins  = secs  / 60
+    hours = mins  / 60
     days  = hours / 24
 
-    "#{days} days, #{hours % 24} hours, #{mins % 60} minutes and #{secs % 60} seconds"
+    if    days  >  0
+      "#{days} days, #{hours % 24} hours, #{mins % 60} minutes and #{secs % 60} seconds"
+    elsif hours >  0
+      "#{hours % 24} hours, #{mins % 60} minutes and #{secs % 60} seconds"
+    elsif mins  >  0
+      "#{mins % 60} minutes and #{secs % 60} seconds"
+    elsif secs  >= 0
+      "#{secs % 60} seconds"
+    end
   end
   
   def date_of_next
-    delta = self > DateTime.now ? 0 : 7
-    self + delta
+    date  = self + 9 / 24.0 # proxy is PST
+    delta = date > Time.now ? 0 : 7
+    date + delta
   end
 end
 

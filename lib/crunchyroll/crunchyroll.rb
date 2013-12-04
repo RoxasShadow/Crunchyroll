@@ -15,9 +15,8 @@ module Crunchyroll
       return false if title.empty? || url.empty?
       
       air  = Nokogiri::HTML(open(url)).xpath('//ul[@id="sidebar_elements"]/li')[1].xpath('.//p')[0].text
-
       day_literal = air.split('Simulcast on ')[1].split(' ')[0]
-      date        = DateTime.parse(air.split('Simulcast on ')[1]).date_of_next
+      date        = Time.parse(air.split('Simulcast on ')[1]).date_of_next
 
       return {
         :title => title,
@@ -25,7 +24,7 @@ module Crunchyroll
         :day   => day_literal,
         :hour  => date.hour.fix,
         :min   => date.min.fix,
-        :left  => date.time_left(DateTime.now)
+        :left  => date.time_left(Time.now)
       }
     rescue
       return false
