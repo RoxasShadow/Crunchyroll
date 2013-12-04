@@ -16,7 +16,7 @@ module Crunchyroll
       
       air  = Nokogiri::HTML(open(url)).xpath('//ul[@id="sidebar_elements"]/li')[1].xpath('.//p')[0].text
       day_literal = air.split('Simulcast on ')[1].split(' ')[0]
-      date        = Time.parse(air.split('Simulcast on ')[1]).date_of_next
+      date = Time.parse(air.split('Simulcast on ')[1]).date_of_next
 
       return {
         :title => title,

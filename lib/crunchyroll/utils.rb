@@ -19,14 +19,18 @@ class Time
     hours = mins  / 60
     days  = hours / 24
 
-    if    days  >  0
-      "#{days} days, #{hours % 24} hours, #{mins % 60} minutes and #{secs % 60} seconds"
+    secs  %= 60
+    mins  %= 60
+    hours %= 24
+
+    if days > 0
+      "#{days} days, #{hours} hours, #{mins} minutes and #{secs} seconds"
     elsif hours >  0
-      "#{hours % 24} hours, #{mins % 60} minutes and #{secs % 60} seconds"
+      "#{hours} hours, #{mins} minutes and #{secs} seconds"
     elsif mins  >  0
-      "#{mins % 60} minutes and #{secs % 60} seconds"
+      "#{mins} minutes and #{secs} seconds"
     elsif secs  >= 0
-      "#{secs % 60} seconds"
+      "#{secs} seconds"
     end
   end
   
