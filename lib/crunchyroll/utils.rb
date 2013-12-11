@@ -13,15 +13,13 @@
 ##
 
 class Time
-  def time_left(date)
-    secs  = (self - date).to_i
-    mins  = secs  / 60
-    hours = mins  / 60
-    days  = hours / 24
-
-    secs  %= 60
-    mins  %= 60
-    hours %= 24
+  def time_left(start_time)
+    diff  = TimeDifference.between(start_time, self.add_day).in_general
+    
+    secs  = diff[:seconds].to_i
+    mins  = diff[:minutes].to_i
+    hours = diff[:hours].to_i
+    days  = diff[:days].to_i
 
     if days > 0
       "#{days} days, #{hours} hours, #{mins} minutes and #{secs} seconds"
@@ -32,6 +30,10 @@ class Time
     elsif secs  >= 0
       "#{secs} seconds"
     end
+  end
+
+  def add_day(n = 1)
+    self + (n * 24 * 60 * 60)
   end
   
   def date_of_next
