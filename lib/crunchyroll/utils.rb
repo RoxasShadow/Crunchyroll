@@ -11,10 +11,9 @@
 # 
 #  0. You just DO WHAT THE FUCK YOU WANT TO.
 ##
-
 class Time
-  def time_left(start_time)
-    diff  = TimeDifference.between(start_time, self.add_day).in_general
+  def left(end_time)
+    diff  = TimeDifference.between(self, end_time.add_hour(9).add_day).in_general
     
     secs  = diff[:seconds].to_i
     mins  = diff[:minutes].to_i
@@ -35,16 +34,28 @@ class Time
   def add_day(n = 1)
     self + (n * 24 * 60 * 60)
   end
-  
-  def date_of_next
-    date  = self + 9 / 24.0 # proxy is PST
-    delta = date > Time.now ? 0 : 7
-    date + delta
+
+  def add_hour(n = 1)
+    self + (n * 60)
   end
 end
 
 class Fixnum
-  def fix
+  def to_24h
     self > 9 ? self.to_s : "0#{self}"
+  end
+end
+
+class String
+  def format_cr_date
+    s = ''
+    self.split('Simulcast on ')[1][0..-5].split.each { |d| s += d.end_with?(?s) ? d[0..-2] : d; s += ' ' }
+    s = s.strip[0..-3]
+
+    day     = s.split[0]
+    time    = s.split[1].split(?:)
+    hours   = time[0].strip.to_i
+    minutes = time[1]
+    return "#{day} #{hours + 12}:#{minutes}"
   end
 end

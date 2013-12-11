@@ -16,4 +16,5 @@ Gem::Specification.new { |s|
 
   s.add_runtime_dependency 'nokogiri'
   s.add_runtime_dependency 'time_difference'
+  s.add_runtime_dependency 'chronic'
 }
