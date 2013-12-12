@@ -13,7 +13,7 @@
 ##
 class Time
   def left(end_time)
-    diff  = TimeDifference.between(self, end_time.add_hour(9).add_day).in_general
+    diff  = TimeDifference.between(self, end_time).in_general
     
     secs  = diff[:seconds].to_i
     mins  = diff[:minutes].to_i
@@ -31,12 +31,8 @@ class Time
     end
   end
 
-  def add_day(n = 1)
-    self + (n * 24 * 60 * 60)
-  end
-
-  def add_hour(n = 1)
-    self + (n * 60)
+  def add_hours(n = 1)
+    self + (n * 60 * 60)
   end
 end
 
@@ -47,15 +43,20 @@ class Fixnum
 end
 
 class String
+  def to_24h
+    DateTime.parse(self).strftime '%H:%M'
+  end
+
   def format_cr_date
     s = ''
     self.split('Simulcast on ')[1][0..-5].split.each { |d| s += d.end_with?(?s) ? d[0..-2] : d; s += ' ' }
-    s = s.strip[0..-3]
+    
+    am_pm = s.strip[-2..-1]
+    s     = s.strip[0..-3]
 
-    day     = s.split[0]
-    time    = s.split[1].split(?:)
-    hours   = time[0].strip.to_i
-    minutes = time[1]
-    return "#{day} #{hours + 12}:#{minutes}"
+    day_time = s.split
+    day      = day_time.take(1).first
+    time     = day_time.join.to_24h
+    return "#{day} #{time}"
   end
 end
