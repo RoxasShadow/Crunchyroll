@@ -11,6 +11,7 @@
 # 
 #  0. You just DO WHAT THE FUCK YOU WANT TO.
 ##
+
 class Time
   def left(end_time)
     diff  = TimeDifference.between(self, end_time).in_general

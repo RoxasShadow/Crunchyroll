@@ -11,8 +11,9 @@
 # 
 #  0. You just DO WHAT THE FUCK YOU WANT TO.
 ##
+
 module Crunchyroll
   def self.version
-    '0.5'
+    '0.6'
   end
 end
