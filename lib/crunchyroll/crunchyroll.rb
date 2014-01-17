@@ -16,7 +16,7 @@ module Crunchyroll
   def self.find(series)
       url   = ''
       title = ''
-      cr    = 'http://www.uswebproxy.com/index.php?q=aHR0cDovL3d3dy5jcnVuY2h5cm9sbC5jb20vbGluZXVw&hl=3ed'
+      cr    = 'http://www.iamalittlekitty.info/index.php?q=aHR0cDovL3d3dy5jcnVuY2h5cm9sbC5jb20vbGluZXVw&hl=3ed'
       Nokogiri::HTML(open(cr)).xpath('//a[@class="portrait-element block-link titlefix element-lineup-anime"]').each { |r|
         if r['title'].downcase.include? series.downcase
           title = r['title']
@@ -40,5 +40,3 @@ module Crunchyroll
       }
   end
 end
-
-Crunchyroll::find 'Nisekoi'
