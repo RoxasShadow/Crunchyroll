@@ -35,8 +35,8 @@ module Crunchyroll
         :title => title,
         :where => 'Crunchyroll',
         :day   => day_literal,
-        :hour  => date.hour,
-        :min   => date.min,
+        :hour  => date.hour <= 9 ? "0#{date.hour}" : date.hour,
+        :min   => date.min  <= 9 ? "0#{date.min}"  : date.min,
         :left  => Time.now.left(date)
       }
   end
