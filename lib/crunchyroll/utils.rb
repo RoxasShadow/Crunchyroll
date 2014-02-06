@@ -18,8 +18,8 @@ class Time
     
     secs  = diff[:seconds].to_i
     mins  = diff[:minutes].to_i
-    hours = diff[:hours].to_i
-    days  = diff[:days].to_i
+    hours = diff[:hours  ].to_i
+    days  = diff[:days   ].to_i
 
     if days > 0
       "#{days} days, #{hours} hours, #{mins} minutes and #{secs} seconds"
@@ -37,15 +37,9 @@ class Time
   end
 end
 
-class Fixnum
-  def to_24h
-    self > 9 ? self.to_s : "0#{self}"
-  end
-end
-
 class String
   def to_24h
-    DateTime.parse(self).strftime '%H:%M'
+    DateTime.parse(self).strftime("%H:%M")
   end
 
   def format_cr_date
@@ -56,8 +50,8 @@ class String
     s     = s.strip[0..-3]
 
     day_time = s.split
-    day      = day_time.take(1).first
-    time     = day_time.join.to_24h
+    day      = day_time.shift
+    time     = day_time.shift.to_24h
     return "#{day} #{time}"
   end
 end

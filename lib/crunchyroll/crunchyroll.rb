@@ -26,16 +26,17 @@ module Crunchyroll
       }
       return false if title.empty? || url.empty?
       
-      air         = Nokogiri::HTML(open(url)).xpath('//ul[@id="sidebar_elements"]/li')[1].xpath('.//p')[0].text
-      day_literal = air.split('Simulcast on ')[1].split(' ')[0]
-      date        = Chronic.parse("this #{air.format_cr_date}").add_hours 9
+      air         = Nokogiri::HTML(open(url)).xpath('//ul[@id="sidebar_elements"]/li').select { |e| e.at_xpath('.//p[@class="strong"]') }[0].text
+      day_literal = air.split('Simulcast on ')[1].split(' ')[0][0..-2]
+      date        = Time.parse(air.format_cr_date).add_hours 8
+      date        = Chronic.parse("this #{day_literal} at #{date.hour}:#{date.min}")
 
       return {
         :title => title,
         :where => 'Crunchyroll',
         :day   => day_literal,
-        :hour  => date.hour.to_24h,
-        :min   => date.min.to_24h,
+        :hour  => date.hour,
+        :min   => date.min,
         :left  => Time.now.left(date)
       }
   end
