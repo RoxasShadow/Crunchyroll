@@ -16,3 +16,5 @@ require 'crunchyroll'
 puts "Pupa airs in #{Crunchyroll.get('pupa')[:left]}."
 p    Crunchyroll.today
 ```
+
+The time zone of the sources is PDT (UTC -007). `Crunchyroll::get` and `Crunchyroll::today` accept an optional parameter `time_diff` that is set by default to `8` (UTC +001).
