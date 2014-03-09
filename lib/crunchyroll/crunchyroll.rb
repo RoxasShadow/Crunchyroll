@@ -15,7 +15,7 @@
 module Crunchyroll
 class << self
 
-  def find(series)
+  def find(series, time_diff = 8)
     url   = ''
     title = ''
     cr    = 'http://www.iamalittlekitty.info/index.php?q=aHR0cDovL3d3dy5jcnVuY2h5cm9sbC5jb20vbGluZXVw&hl=3ed'
@@ -30,7 +30,7 @@ class << self
     
     air         = Nokogiri::HTML(open(url)).xpath('//ul[@id="sidebar_elements"]/li').select { |e| e.at_xpath('.//p[@class="strong"]') }[0].text
     day_literal = air.split('Simulcast on ')[1].split(' ')[0][0..-2]
-    date        = Time.parse(air.format_cr_date).add_hours 8
+    date        = Time.parse(air.format_cr_date).add_hours time_diff
     date        = Chronic.parse("this #{day_literal} at #{date.hour}:#{date.min}")
 
     {
@@ -44,13 +44,13 @@ class << self
   end
     alias_method :get, :find
 
-  def today
+  def today(time_diff = 8)
     url = 'http://horriblesubs.info/release-schedule/'
     [].tap { |releases|
       Nokogiri::HTML(open(url)).xpath('//div[@class="today-releases"]/div[@class="series-name"]').each { |r|
         title = r.at_xpath('.//child::text()').to_s.squeeze(' ')
         time  = r.at_xpath('.//span').text
-        date  = Time.parse(time).add_hours 9
+        date  = Time.parse(time).add_hours time_diff
 
         releases << {
           :title => title,
