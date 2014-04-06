@@ -12,10 +12,14 @@
 #  0. You just DO WHAT THE FUCK YOU WANT TO.
 ##
 
+using Utils
+Time.zone          = 'MST'
+Chronic.time_class = Time.zone
+
 module Crunchyroll
 class << self
 
-  def find(series, time_diff = 8)
+  def find(series, time_zone = 'Rome')
     url   = ''
     title = ''
     cr    = 'http://www.iamalittlekitty.info/index.php?q=aHR0cDovL3d3dy5jcnVuY2h5cm9sbC5jb20vbGluZXVw&hl=3ed'
@@ -30,8 +34,8 @@ class << self
     
     air         = Nokogiri::HTML(open(url)).xpath('//ul[@id="sidebar_elements"]/li').select { |e| e.at_xpath('.//p[@class="strong"]') }[0].text
     day_literal = air.split('Simulcast on ')[1].split(' ')[0][0..-2]
-    date        = Time.parse(air.format_cr_date).add_hours time_diff
-    date        = Chronic.parse("this #{day_literal} at #{date.hour}:#{date.min}")
+    date        = Time.parse(air.format_cr_date)
+    date        = Chronic.parse("this #{day_literal} at #{date.hour}:#{date.min}").in_time_zone time_zone
 
     {
       :title => title,
@@ -44,13 +48,14 @@ class << self
   end
     alias_method :get, :find
 
-  def today(time_diff = 8)
+  def today(time_zone = 'Rome')
     url = 'http://horriblesubs.info/release-schedule/'
+
     [].tap { |releases|
       Nokogiri::HTML(open(url)).xpath('//div[@class="today-releases"]/div[@class="series-name"]').each { |r|
         title = r.at_xpath('.//child::text()').to_s.squeeze(' ')
         time  = r.at_xpath('.//span').text
-        date  = Time.parse(time).add_hours time_diff
+        date  = Chronic.parse(time).in_time_zone time_zone
 
         releases << {
           :title => title,

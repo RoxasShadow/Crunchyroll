@@ -1,6 +1,6 @@
 Crunchyroll
 ===========
-Find and get infos about series airing on Crunchyroll.
+Find and get infos about series airing on [Crunchyroll](http://www.crunchyroll.com).
 
 Install
 ------
@@ -13,8 +13,9 @@ A complete example is available [https://github.com/RoxasShadow/Descartes/blob/m
 ```ruby
 require 'crunchyroll'
 
-puts "Pupa airs in #{Crunchyroll.get('pupa')[:left]}."
+puts "Nisekoi airs in #{Crunchyroll.get('Nisekoi')[:left]}."
 p    Crunchyroll.today
 ```
 
-The time zone of the sources is PDT (UTC -007). `Crunchyroll::get` and `Crunchyroll::today` accept an optional parameter `time_diff` that is set by default to `8` (UTC +001).
+The time zone of the sources is `MST` (UTC -007).
+`Crunchyroll::get` and `Crunchyroll::today` accept an optional parameter `time_zone` that is set by default to `Rome`.

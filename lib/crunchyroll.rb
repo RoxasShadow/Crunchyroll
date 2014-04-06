@@ -12,9 +12,9 @@
 #  0. You just DO WHAT THE FUCK YOU WANT TO.
 ##
 
-require 'date'
 require 'open-uri'
 require 'nokogiri'
+require 'active_support/time'
 require 'time_difference'
 require 'chronic'
 
