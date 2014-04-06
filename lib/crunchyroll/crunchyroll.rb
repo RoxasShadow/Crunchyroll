@@ -31,8 +31,11 @@ class << self
       end
     }
     return false if title.empty? || url.empty?
-    
-    air         = Nokogiri::HTML(open(url)).xpath('//ul[@id="sidebar_elements"]/li').select { |e| e.at_xpath('.//p[@class="strong"]') }[0].text
+
+    air = Nokogiri::HTML(open(url)).xpath('//ul[@id="sidebar_elements"]/li').select { |e| e.at_xpath('.//p[@class="strong"]') }[0]
+    return false unless air
+
+    air         = air.text
     day_literal = air.split('Simulcast on ')[1].split(' ')[0][0..-2]
     date        = Time.parse(air.format_cr_date)
     date        = Chronic.parse("this #{day_literal} at #{date.hour}:#{date.min}").in_time_zone time_zone

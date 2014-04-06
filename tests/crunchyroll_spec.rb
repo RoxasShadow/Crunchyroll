@@ -29,6 +29,11 @@ describe Crunchyroll do
     expect { crunchy[:left ].to   end_with('seconds'  ) }
   end
 
+  it 'cannot find an old series' do
+    crunchy = Crunchyroll.find 'pupa'
+    expect { crunchy.to be false }
+  end
+
   it "gets today's releases" do
     crunchy = Crunchyroll.today
 
