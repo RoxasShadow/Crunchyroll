@@ -63,13 +63,15 @@ class << self
         releases << {
           :title => title,
           :where => 'Crunchyroll',
-          :day   => Time.now.strftime("%A"),
+          :date  => date,
+          :aired => Time.now.day != date.day,
+          :day   => date.strftime("%A"),
           :hour  => date.hour,
           :min   => date.min,
           :left  => Time.now.left(date)
         }
       }
-    }
+    }.sort_by { |h| h[:date] }
   end
 
 end

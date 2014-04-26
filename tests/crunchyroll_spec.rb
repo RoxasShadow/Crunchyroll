@@ -36,8 +36,6 @@ describe Crunchyroll do
 
   it "gets today's releases" do
     crunchy = Crunchyroll.today
-
-    expect { crunchy.to         be_kind_of(Array)  }
-    expect { crunchy.length.to  be >= 4            }
+    expect { crunchy.first.day.to be eql(Time.now.day) }
   end
 end
