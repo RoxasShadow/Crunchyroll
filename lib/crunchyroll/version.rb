@@ -14,6 +14,6 @@
 
 module Crunchyroll
   def self.version
-    '0.9.4'
+    '0.9.5'
   end
 end

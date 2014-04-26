@@ -51,7 +51,7 @@ class << self
   end
     alias_method :get, :find
 
-  def today(time_zone = 'Rome', strict = false)
+  def today(time_zone = 'Rome')
     url = 'http://horriblesubs.info/release-schedule/'
     tomorrow = Date.tomorrow
     today    = Time.now
@@ -60,15 +60,20 @@ class << self
       Nokogiri::HTML(open(url)).xpath('//div[@class="today-releases"]/div[@class="series-name"]').each { |r|
         title = r.at_xpath('.//child::text()').to_s.squeeze(' ')
         time  = r.at_xpath('.//span').text
-        date  = Chronic.parse(time).in_time_zone time_zone
+        date  = Chronic.parse("today at #{time}").in_time_zone time_zone
 
-        next if strict && date.day == tomorrow.day
+        time_diff = TimeDifference.between(today, date).in_general
+        airs = if date.day == tomorrow.day && time_diff[:days] == 0
+          :tomorrow
+        else
+          time_diff[:days] == 0 ? :today : :aired
+        end
 
         releases << {
           :title => title,
           :where => 'Crunchyroll',
           :date  => date,
-          :aired => today.day != date.day,
+          :airs  => airs,
           :day   => date.strftime("%A"),
           :hour  => date.hour,
           :min   => date.min,
