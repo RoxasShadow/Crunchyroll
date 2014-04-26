@@ -51,7 +51,7 @@ class << self
   end
     alias_method :get, :find
 
-  def today(time_zone = 'Rome', strict = true)
+  def today(time_zone = 'Rome', strict = false)
     url = 'http://horriblesubs.info/release-schedule/'
     tomorrow = Date.tomorrow
     today    = Time.now
