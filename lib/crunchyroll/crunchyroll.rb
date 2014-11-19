@@ -37,7 +37,7 @@ class << self
     return false unless air
 
     air         = air.text
-    day_literal = air.split('Simulcast on ')[1].split(' ')[0][0..-2]
+    day_literal = (air.scan(/\d+:/)[0] + air.split(/\d+:/)[1]).split[0]
     date        = Time.parse(air.format_cr_date)
     date        = Chronic.parse("this #{day_literal} at #{date.hour}:#{date.min}").in_time_zone time_zone
 
