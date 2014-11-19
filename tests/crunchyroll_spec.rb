@@ -11,13 +11,12 @@
 require 'crunchyroll'
 
 describe Crunchyroll do
-  it 'gets infos about One Piece' do
-    crunchy = Crunchyroll.find 'one piece'
+  it 'gets infos about Naruto' do
+    crunchy = Crunchyroll.find 'naruto'
     expect(crunchy).to be_kind_of(Hash)
 
-    expect(crunchy[:title]).to start_with('One Piece')
-    expect(crunchy[:day  ]).to start_with('Saturday' )
-    expect(crunchy[:left ]).to   end_with('seconds'  )
+    expect(crunchy[:title]).to start_with('Naruto')
+    expect(crunchy[:left ]).to   end_with('seconds')
   end
 
   it 'cannot find non-simulcasted yet series' do

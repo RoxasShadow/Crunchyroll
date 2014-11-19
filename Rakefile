@@ -4,11 +4,11 @@ require 'rake'
 task :default => [ :build, :install, :test ]
 
 task :build do
-  sh 'gem build   *.gemspec'
+  sh 'gem build *.gemspec'
 end
 
 task :install do
-  # sh 'gem install --no-force rspec'
+  sh 'gem install --no-force rspec'
   sh 'gem install *.gem'
 end
 

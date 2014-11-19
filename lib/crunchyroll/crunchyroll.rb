@@ -21,16 +21,16 @@ module Crunchyroll
 class << self
 
   def find(series, time_zone = 'Rome')
-    url   = ''
-    title = ''
-    cr    = 'http://www.iamalittlekitty.info/index.php?q=aHR0cDovL3d3dy5jcnVuY2h5cm9sbC5jb20vbGluZXVw&hl=3ed'
-    Nokogiri::HTML(open(cr)).xpath('//a[@class="portrait-element block-link titlefix element-lineup-anime"]').each { |r|
+    title, url = [''] * 2
+    cr = 'http://www.crunchyroll.com/lineup' # TODO: restore some proxy from usa
+    Nokogiri::HTML(open(cr)).xpath('//a[@class="portrait-element block-link titlefix element-lineup-anime"]').each do |r|
       if r['title'].downcase.include? series.downcase
         title = r['title']
         url   = r['href' ]
         break
       end
-    }
+    end
+
     return false if title.empty? || url.empty?
 
     air = Nokogiri::HTML(open(url)).xpath('//ul[@id="sidebar_elements"]/li').select { |e| e.at_xpath('.//p[@class="strong"]') }[0]
@@ -57,7 +57,7 @@ class << self
     tomorrow = Date.tomorrow
     today    = Time.now
 
-    [].tap { |releases|
+    [].tap do |releases|
       Nokogiri::HTML(open(url)).xpath('//div[@class="today-releases"]/div[@class="series-name"]').each { |r|
         title = r.at_xpath('.//child::text()').to_s.squeeze(' ')
         time  = r.at_xpath('.//span').text
@@ -82,7 +82,7 @@ class << self
           :left  => today.left(date)
         }
       }
-    }.sort_by { |h| h[:date] }
+    end.sort_by { |h| h[:date] }
   end
 
 end
