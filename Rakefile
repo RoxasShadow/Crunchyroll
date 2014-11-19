@@ -8,7 +8,7 @@ task :build do
 end
 
 task :install do
-  sh 'gem install --no-force rspec'
+  # sh 'gem install --no-force rspec'
   sh 'gem install *.gem'
 end
 

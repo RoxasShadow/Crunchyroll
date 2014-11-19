@@ -1,18 +1,19 @@
 ##
 #            DO WHAT THE FUCK YOU WANT TO PUBLIC LICENSE
 #                    Version 2, December 2004
-# 
+#
 # Everyone is permitted to copy and distribute verbatim or modified
 # copies of this license document, and changing it is allowed as long
 # as the name is changed.
-# 
+#
 #            DO WHAT THE FUCK YOU WANT TO PUBLIC LICENSE
 #   TERMS AND CONDITIONS FOR COPYING, DISTRIBUTION AND MODIFICATION
-# 
+#
 #  0. You just DO WHAT THE FUCK YOU WANT TO.
 ##
 
 using Utils
+
 Time.zone          = 'MST'
 Chronic.time_class = Time.zone
 
@@ -61,6 +62,7 @@ class << self
         title = r.at_xpath('.//child::text()').to_s.squeeze(' ')
         time  = r.at_xpath('.//span').text
         date  = Chronic.parse("today at #{time}").in_time_zone time_zone
+        date -= 3600 if date.dst?
 
         time_diff = TimeDifference.between(today, date).in_general
         airs = if date.day == tomorrow.day && time_diff[:days] == 0

@@ -11,31 +11,25 @@
 require 'crunchyroll'
 
 describe Crunchyroll do
-  it 'gets infos about narushit' do # just because shonen jump's shits have no end
-    crunchy = Crunchyroll.find 'naruto'
-    expect { crunchy.to be_kind_of(Hash) }
-
-    expect { crunchy[:title].to start_with('Naruto Shippuden') }
-    expect { crunchy[:day  ].to start_with('Thursday'        ) }
-    expect { crunchy[:left ].to   end_with('seconds'         ) }
-  end
-
-  it 'gets infos about oneshit' do
+  it 'gets infos about One Piece' do
     crunchy = Crunchyroll.find 'one piece'
-    expect { crunchy.to be_kind_of(Hash) }
+    expect(crunchy).to be_kind_of(Hash)
 
-    expect { crunchy[:title].to start_with('One Piece') }
-    expect { crunchy[:day  ].to start_with('Saturday' ) }
-    expect { crunchy[:left ].to   end_with('seconds'  ) }
+    expect(crunchy[:title]).to start_with('One Piece')
+    expect(crunchy[:day  ]).to start_with('Saturday' )
+    expect(crunchy[:left ]).to   end_with('seconds'  )
   end
 
-  it 'cannot find an old series' do
+  it 'cannot find non-simulcasted yet series' do
     crunchy = Crunchyroll.find 'pupa'
-    expect { crunchy.to be false }
+    expect(crunchy).to be_falsy
   end
 
   it "gets today's releases" do
     crunchy = Crunchyroll.today
-    expect { crunchy.first.day.to be eql(Time.now.day) }
+
+    expect(crunchy).to be_kind_of(Array)
+    expect(crunchy.first).to be_kind_of(Hash)
+    expect(crunchy.first[:day]).to eq(Time.now.strftime('%A'))
   end
 end
