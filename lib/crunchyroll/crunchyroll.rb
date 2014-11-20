@@ -21,18 +21,11 @@ module Crunchyroll
 class << self
 
   def find(series, time_zone = 'Rome', proxy = nil, use_proxy = true)
-    cr = URI('http://www.crunchyroll.com/lineup')
-
-    response = if use_proxy
-      proxy ||= { host: '23.25.88.181', port: '8080' }
-      Net::HTTP::Proxy(proxy[:host], proxy[:port]).start(cr.host, cr.port) { |r| r.request(Net::HTTP::Get.new(cr.path)) }.body
-    else
-      open(cr.to_s).read
-    end
+    proxy ||= { host: '104.140.67.36', port: '7808' }
+    cr      = 'http://www.crunchyroll.com/lineup'
 
     title, url = [''] * 2
-
-    Nokogiri::HTML(response).xpath('//a[@class="portrait-element block-link titlefix element-lineup-anime"]').each do |r|
+    Nokogiri::HTML(get_page(cr, proxy, use_proxy)).xpath('//a[@class="portrait-element block-link titlefix element-lineup-anime"]').each do |r|
       if r['title'].downcase.include? series.downcase
         title = r['title']
         url   = r['href' ]
@@ -40,11 +33,9 @@ class << self
       end
     end
 
-    ENV.delete('http_proxy')
-
     return false if title.empty? || url.empty?
 
-    air = Nokogiri::HTML(open(url)).xpath('//ul[@id="sidebar_elements"]/li').select { |e| e.at_xpath('.//p[@class="strong"]') }[0]
+    air = Nokogiri::HTML(get_page(url, proxy, use_proxy)).xpath('//ul[@id="sidebar_elements"]/li').select { |e| e.at_xpath('.//p[@class="strong"]') }[0]
     return false unless air
 
     air         = air.text
@@ -94,6 +85,15 @@ class << self
         }
       }
     end.sort_by { |h| h[:date] }
+  end
+
+  def get_page(url, proxy, use_proxy)
+    if use_proxy
+      url = URI(url)
+      Net::HTTP::Proxy(proxy[:host], proxy[:port]).start(url.host, url.port) { |r| r.request(Net::HTTP::Get.new(url.path)) }.body
+    else
+      open(url).read
+    end
   end
 
 end
