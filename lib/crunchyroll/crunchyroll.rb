@@ -20,9 +20,11 @@ Chronic.time_class = Time.zone
 module Crunchyroll
 class << self
 
-  def find(series, time_zone = 'Rome')
+  def find(series, time_zone = 'Rome', proxy = 'http://108.165.33.12:3128')
+    ENV['http_proxy'] ||= proxy
+
     title, url = [''] * 2
-    cr = 'http://www.crunchyroll.com/lineup' # TODO: restore some proxy from usa
+    cr = 'http://www.crunchyroll.com/lineup'
     Nokogiri::HTML(open(cr)).xpath('//a[@class="portrait-element block-link titlefix element-lineup-anime"]').each do |r|
       if r['title'].downcase.include? series.downcase
         title = r['title']
@@ -30,6 +32,8 @@ class << self
         break
       end
     end
+
+    ENV.delete('http_proxy')
 
     return false if title.empty? || url.empty?
 
