@@ -20,12 +20,19 @@ Chronic.time_class = Time.zone
 module Crunchyroll
 class << self
 
-  def find(series, time_zone = 'Rome', proxy = 'http://108.165.33.12:3128')
-    ENV['http_proxy'] ||= proxy
+  def find(series, time_zone = 'Rome', proxy = nil, use_proxy = true)
+    cr = URI('http://www.crunchyroll.com/lineup')
+
+    response = if use_proxy
+      proxy ||= { host: '23.25.88.181', port: '8080' }
+      Net::HTTP::Proxy(proxy[:host], proxy[:port]).start(cr.host, cr.port) { |r| r.request(Net::HTTP::Get.new(cr.path)) }.body
+    else
+      open(cr.to_s).read
+    end
 
     title, url = [''] * 2
-    cr = 'http://www.crunchyroll.com/lineup'
-    Nokogiri::HTML(open(cr)).xpath('//a[@class="portrait-element block-link titlefix element-lineup-anime"]').each do |r|
+
+    Nokogiri::HTML(response).xpath('//a[@class="portrait-element block-link titlefix element-lineup-anime"]').each do |r|
       if r['title'].downcase.include? series.downcase
         title = r['title']
         url   = r['href' ]
