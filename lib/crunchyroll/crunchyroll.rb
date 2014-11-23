@@ -64,7 +64,7 @@ class << self
         title = r.at_xpath('.//child::text()').to_s.squeeze(' ')
         time  = r.at_xpath('.//span').text
         date  = Chronic.parse("today at #{time}").in_time_zone time_zone
-        date -= 3600 if date.dst?
+        date += 3600 unless today.dst?
 
         time_diff = TimeDifference.between(today, date).in_general
         airs = if date.day == tomorrow.day && time_diff[:days] == 0

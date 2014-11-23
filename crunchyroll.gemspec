@@ -14,8 +14,8 @@ Gem::Specification.new { |s|
   s.require_paths = ['lib']
   s.files         = Dir.glob('lib/**/*.rb')
 
-  s.add_runtime_dependency 'nokogiri'
-  s.add_runtime_dependency 'time_difference'
-  s.add_runtime_dependency 'chronic'
-  s.add_runtime_dependency 'activesupport'
+  s.add_runtime_dependency 'nokogiri',        '~> 1.6'
+  s.add_runtime_dependency 'time_difference', '~> 0.3'
+  s.add_runtime_dependency 'chronic',         '~> 0.10'
+  s.add_runtime_dependency 'activesupport',   '~> 4.1'
 }
