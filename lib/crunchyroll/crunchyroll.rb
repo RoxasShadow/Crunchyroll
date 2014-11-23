@@ -42,6 +42,7 @@ class << self
     day_literal = air.split('Simulcast on ')[1].split[0][0..-2]
     date        = Time.parse(air.format_cr_date)
     date        = Chronic.parse("this #{day_literal} at #{date.hour}:#{date.min}").in_time_zone time_zone
+    date       += 3600 unless Time.now.dst?
 
     {
       :title => title,
