@@ -58,10 +58,11 @@ class << self
     today    = Time.now
 
     [].tap do |releases|
-      Nokogiri::HTML(open(url)).xpath('//div[@class="today-releases"]/div[@class="series-name"]').each { |r|
-        title = r.at_xpath('.//child::text()').to_s.squeeze(' ')
-        time  = r.at_xpath('.//span').text
-        date  = Chronic.parse("today at #{time}").in_time_zone time_zone
+      Nokogiri::HTML(open(url)).xpath('//table[@class="schedule-table"]/tr').each { |r|
+        title = r.at_xpath('.//td[@class="schedule-widget-show"]').text
+        time  = r.at_xpath('.//td[@class="schedule-time"]').text
+
+        date  = Chronic.parse("today at #{time}").in_time_zone(time_zone)
         date += 3600 unless today.dst?
 
         time_diff = TimeDifference.between(today, date).in_general
