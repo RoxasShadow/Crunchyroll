@@ -12,16 +12,13 @@
 #  0. You just DO WHAT THE FUCK YOU WANT TO.
 ##
 
-using Utils
-
 Time.zone          = 'MST'
 Chronic.time_class = Time.zone
 
 module Crunchyroll
 class << self
-
   def find(series, time_zone = 'Rome', proxy = nil, use_proxy = true)
-    proxy ||= { host: '104.140.67.36', port: '7808' }
+    proxy ||= { host: '136.0.16.217', port: '7808' }
     cr      = 'http://www.crunchyroll.com/lineup'
 
     title, url = [''] * 2
@@ -40,7 +37,7 @@ class << self
 
     air         = air.text
     day_literal = air.split('Simulcast on ')[1].split[0][0..-2]
-    date        = Time.parse(air.format_cr_date)
+    date        = Time.parse(Utils.format_cr_date(air))
     date        = Chronic.parse("this #{day_literal} at #{date.hour}:#{date.min}").in_time_zone time_zone
     date       += 3600 unless Time.now.dst?
 
@@ -50,7 +47,7 @@ class << self
       :day   => day_literal,
       :hour  => date.hour <= 9 ? "0#{date.hour}" : date.hour,
       :min   => date.min  <= 9 ? "0#{date.min}"  : date.min,
-      :left  => Time.now.left(date)
+      :left  => Utils.time_left(Time.now, date)
     }
   end
     alias_method :get, :find
@@ -82,7 +79,7 @@ class << self
           :day   => date.strftime("%A"),
           :hour  => date.hour,
           :min   => date.min,
-          :left  => today.left(date)
+          :left  => Utils.time_left(today, date)
         }
       }
     end.sort_by { |h| h[:date] }

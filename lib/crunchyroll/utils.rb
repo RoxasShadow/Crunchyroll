@@ -12,10 +12,11 @@
 #  0. You just DO WHAT THE FUCK YOU WANT TO.
 ##
 
+module Crunchyroll
 module Utils
-  refine Time do
-    def left(end_time)
-      diff  = TimeDifference.between(self, end_time).in_general
+  class << self
+    def time_left(start_time, end_time)
+      diff  = TimeDifference.between(start_time, end_time).in_general
 
       secs  = diff[:seconds].to_i
       mins  = diff[:minutes].to_i
@@ -32,24 +33,19 @@ module Utils
         "#{secs} seconds"
       end
     end
-  end
 
-  refine String do
-    def to_24h
-      DateTime.parse(self).strftime("%H:%M")
-    end
-
-    def format_cr_date
+    def format_cr_date(date)
       s = ''
-      self.split('Simulcast on ')[1][0..-5].split.each { |d| s += d.end_with?(?s) ? d[0..-2] : d; s += ' ' }
+      date.split('Simulcast on ')[1][0..-5].split.each { |d| s += d.end_with?(?s) ? d[0..-2] : d; s += ' ' }
 
       am_pm = s.strip[-2..-1]
       s     = s.strip[0..-3]
 
       day_time = s.split
       day      = day_time.shift
-      time     = day_time.shift.to_24h
-      return "#{day} #{time}"
+      time     = DateTime.parse(day_time.shift).strftime('%H:%M')
+      "#{day} #{time}"
     end
   end
+end
 end
